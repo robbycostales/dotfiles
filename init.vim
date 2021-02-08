@@ -1,11 +1,9 @@
-" This is a test!
-
 " Set leader key (spacebar)
 nnoremap <SPACE> <Nop>
 let mapleader = " "
 let maplocalleader = " "
 " + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
-"                                  SETS
+"                                   SETS
 " + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
 
 set shiftwidth=4 " Set indent size
@@ -115,6 +113,11 @@ Plug 'neovim/nvim-lspconfig'
 Plug 'nvim-lua/completion-nvim'
 Plug 'tjdevries/nlua.nvim'
 Plug 'tjdevries/lsp_extensions.nvim'
+" Indent guides (visual)
+Plug 'nathanaelkane/vim-indent-guides'
+" Undo Tree
+Plug 'mbbill/undotree'
+
 call plug#end()
 
 " + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
@@ -194,3 +197,16 @@ lua require'lspconfig'.clangd.setup{ on_attach=require'completion'.on_attach }
 lua require'lspconfig'.pyls.setup{ on_attach=require'completion'.on_attach }
 lua require'lspconfig'.gopls.setup{ on_attach=require'completion'.on_attach }
 lua require'lspconfig'.rust_analyzer.setup{ on_attach=require'completion'.on_attach }
+
+" INDENT GUIDES
+let g:indent_guides_enable_on_vim_startup = 1
+set ts=4 sw=4 et
+let g:indent_guides_start_level=2
+let g:indent_guides_guide_size=1
+
+" UNDO TREE
+nnoremap <leader>ut :UndotreeToggle<CR>
+if has("persistent_undo")
+    set undodir=$HOME"/.undodir"
+    set undofile
+endif
