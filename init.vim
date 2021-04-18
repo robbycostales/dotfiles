@@ -35,10 +35,16 @@ set updatetime=50
 set shortmess+=c
 set encoding=utf-8
 
+" Prevent issues with switching between (anaconda) virtual environments
+if has("mac")
+    let g:python3_host_prog = '/Users/robertcostales/anaconda3'
+elseif has("unix")
+    let g:python3_host_prog = '/home/robby/anaconda3'
+endif
+
 " + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
 "                            KEY MAPPINGS
 " + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
-
 
 " Shortcutting split navigation
 map <C-h> <C-w>h
@@ -47,8 +53,16 @@ map <C-k> <C-w>k
 map <C-l> <C-w>l
 
 " Shortcut split opening
-nnoremap <leader>h :split<Space>
-nnoremap <leader>v :vsplit<Space>
+nnoremap <leader>hs :split<CR>
+nnoremap <leader>vs :vsplit<CR>
+
+" Mappings to move lines
+nnoremap <leader>j :m .+1<CR>==
+nnoremap <leader>k :m .-2<CR>==
+" inoremap <leader>j <Esc>:m .+1<CR>==gi
+" inoremap <leader>k <Esc>:m .-2<CR>==gi
+vnoremap <leader>j :m '>+1<CR>gv=gv
+vnoremap <leader>k :m '<-2<CR>gv=gv
 
 " + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
 "                            NICE FUNCTIONS
@@ -67,6 +81,8 @@ augroup ROBBY
     autocmd!
     " Trim whitespaces before writing files
     autocmd BufWritePre * :call TrimWhitespace()
+    " Source on save
+    autocmd BufWritePost $MYVIMRC source $MYVIMRC
 augroup END
 
 " + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
@@ -173,7 +189,7 @@ nmap ++ <plug>NERDCommenterToggle
 " Necessary for integration with other plugin(s) (?)
 filetype plugin on
 " Add spaces after comment delimiters by default
-let g:NERDSpaceDelims = 1
+let g:NERDSpaceDelims = 0
 " Use compact syntax for prettified multi-line comments
 let g:NERDCompactSexyComs = 1
 
@@ -218,3 +234,14 @@ if has("persistent_undo")
     let &undodir=target_path
     set undofile
 endif
+
+" COMPLETION NVIM
+" Use <Tab> and <S-Tab> to navigate through popup menu
+inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+" Set completeopt to have a better completion experience
+set completeopt=menuone,noinsert,noselect
+" Avoid showing message extra message when using completion
+set shortmess+=c
+"map <c-p> to manually trigger completion
+imap <silent> <c-p> <Plug>(completion_trigger)
