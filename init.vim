@@ -37,9 +37,9 @@ set encoding=utf-8
 
 " Prevent issues with switching between (anaconda) virtual environments
 if has("mac")
-    let g:python3_host_prog = '/Users/robertcostales/anaconda3'
+    let g:python3_host_prog = expand('/Users/robertcostales/anaconda3/bin/python')
 elseif has("unix")
-    let g:python3_host_prog = '/home/robby/anaconda3'
+    let g:python3_host_prog = expand('/home/robby/anaconda3/bin/python')
 endif
 
 " + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
@@ -55,6 +55,7 @@ map <C-l> <C-w>l
 " Shortcut split opening
 nnoremap <leader>hs :split<CR>
 nnoremap <leader>vs :vsplit<CR>
+nnoremap <leader>eq <C-w>=
 
 " Mappings to move lines
 nnoremap <leader>j :m .+1<CR>==
@@ -123,6 +124,7 @@ endif
 Plug 'vim-airline/vim-airline'
 " Tags
 Plug 'universal-ctags/ctags'
+Plug 'vim-scripts/ctags.vim'
 Plug 'majutsushi/tagbar'
 " Neovim lsp
 Plug 'neovim/nvim-lspconfig'
@@ -133,7 +135,9 @@ Plug 'tjdevries/lsp_extensions.nvim'
 Plug 'nathanaelkane/vim-indent-guides'
 " Undo Tree
 Plug 'mbbill/undotree'
-
+" Debugger Plugins
+Plug 'puremourning/vimspector', {'do': './install_gadget.py --enable-c --enable-python'}
+Plug 'szw/vim-maximizer'
 call plug#end()
 
 " + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
@@ -141,11 +145,16 @@ call plug#end()
 " + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
 
 " TELESCOPE
-" Key bindings
-nnoremap <leader>ff <cmd>lua require('telescope.builtin').find_files()<cr>
-nnoremap <leader>fg <cmd>lua require('telescope.builtin').live_grep()<cr>
-nnoremap <leader>fb <cmd>lua require('telescope.builtin').buffers()<cr>
-nnoremap <leader>fh <cmd>lua require('telescope.builtin').help_tags()<cr>
+" Key bindings (using lua)
+" nnoremap <leader>ff <cmd>lua require('telescope.builtin').find_files()<cr>
+" nnoremap <leader>fg <cmd>lua require('telescope.builtin').live_grep()<cr>
+" nnoremap <leader>fb <cmd>lua require('telescope.builtin').buffers()<cr>
+" nnoremap <leader>fh <cmd>lua require('telescope.builtin').help_tags()<cr>
+" Find files using Telescope command-line sugar.
+nnoremap <leader>ff <cmd>Telescope find_files<cr>
+nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+nnoremap <leader>fb <cmd>Telescope buffers<cr>
+nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 
 " GRUVBOX
 " Colorscheme
@@ -237,3 +246,35 @@ set completeopt=menuone,noinsert,noselect
 set shortmess+=c
 "map <c-p> to manually trigger completion
 imap <silent> <c-p> <Plug>(completion_trigger)
+
+" VIMSPECTOR and MAXIMIZER
+" Toggle maximizer (zoom in / out of multi-pane view)
+nnoremap <leader>m :MaximizerToggle!<CR>
+" Useful function to zoom into particular windows
+fun! GotoWindow(id)
+    call win_gotoid(a:id)
+    MaximizerToggle
+endfun
+" Launch debugger ("debug debug!")
+nnoremap <leader>dd :call vimspector#Launch()<CR>
+" Quickly go to certain panes (sometimes faster than maximizer command)
+nnoremap <leader>dc :call GotoWindow(g:vimspector_session_windows.code)<CR>
+nnoremap <leader>dt :call GotoWindow(g:vimspector_session_windows.tagpage)<CR>
+nnoremap <leader>dv :call GotoWindow(g:vimspector_session_windows.variables)<CR>
+nnoremap <leader>dw :call GotoWindow(g:vimspector_session_windows.watches)<CR>
+nnoremap <leader>ds :call GotoWindow(g:vimspector_session_windows.stack_track)<CR>
+nnoremap <leader>do :call GotoWindow(g:vimspector_session_windows.output)<CR>
+" Exit debug session ("debug end")
+nnoremap <leader>de :call vimspector#Reset()<CR>
+" Breakpoints
+nnoremap <leader>dt :call vimspector#CleanLineBreakpoint()<CR>
+nmap <leader>du <Plug>VimspectorRunToCursor
+nmap <leader>db <Plug>VimspectorToggleBreakpoint
+nmap <leader>di <Plug>VimspectorToggleConditionalBreakpoint
+" Stepping through code
+nmap <leader>dl <Plug>VimspectorStepInto
+nmap <leader>dj <Plug>VimspectorStepOver
+nmap <leader>dk <Plug>VimspectorStepOut
+nmap <leader>d_ <Plug>VimspectorRestart
+nmap <leader>dp <Plug>VimspectorStop
+nnoremap <leader>dn :call vimspector#Continue()<CR>
