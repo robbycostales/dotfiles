@@ -3,7 +3,7 @@ nnoremap <SPACE> <Nop>
 let mapleader = " "
 let maplocalleader = " "
 " + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
-"                                   SETS
+"                                    SETS
 " + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
 
 set shiftwidth=4 " Set indent size
@@ -207,6 +207,14 @@ let g:indent_guides_guide_size=1
 " UNDO TREE
 nnoremap <leader>ut :UndotreeToggle<CR>
 if has("persistent_undo")
-    set undodir=$HOME"/.undodir"
+   let target_path = expand('~/.undodir')
+
+    " create the directory and any parent directories
+    " if the location does not exist.
+    if !isdirectory(target_path)
+        call mkdir(target_path, "p", 0700)
+    endif
+
+    let &undodir=target_path
     set undofile
 endif
