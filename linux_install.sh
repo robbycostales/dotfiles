@@ -2,6 +2,7 @@
 # Necessary installations
 echo "Neovim: Installing appimage"
 curl -L https://github.com/neovim/neovim/releases/download/nightly/nvim.appimage > ~/nvim.appimage
+chmod +x ~/nvim.appimage
 mkdir ~/.vim/colors
 brew install --HEAD luajit
 # brew install --HEAD neovim # currently broken
