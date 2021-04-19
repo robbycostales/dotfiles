@@ -2,6 +2,7 @@
 # Necessary installations
 echo "Neovim: Installing appimage"
 curl -L https://github.com/neovim/neovim/releases/download/nightly/nvim.appimage > ~/nvim.appimage
+mkdir ~/.vim/colors
 brew install --HEAD luajit
 # brew install --HEAD neovim # currently broken
 brew install ctags-exuberant
@@ -16,6 +17,7 @@ fi
 ln -sf "$PWD/init.vim" ~/.config/nvim/init.vim
 echo "Neovim: Installing plugins"
 ~/nvim.appimage --headless +PlugInstall +qall
-
+cp ~/.vim/plugged/gruvbox/colors/gruvbox.vim ~/.vim/colors/
+~/nvim.appimage --headless +PlugInstall +qall
 echo "Note: You must manually create an alias for running application ~/nvim.appimage"
-echo "E.g. add following line to ~/.bashrc: 'alias nvim=~/nvim.appimage'"
+echo "E.g. add following line to ~/.bashrc: 'alias vim=~/nvim.appimage'"
