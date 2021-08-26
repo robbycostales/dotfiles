@@ -5,6 +5,7 @@ brew install --HEAD neovim
 brew tap homebrew/cask-fonts
 brew install --cask font-hack-nerd-font
 brew install ctags-exuberant
+brew install ctags
 brew install fzf
 # To install useful key bindings and fuzzy completion:
 $(brew --prefix)/opt/fzf/install
