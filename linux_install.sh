@@ -5,6 +5,12 @@ curl -L https://github.com/neovim/neovim/releases/download/nightly/nvim.appimage
 chmod +x ~/nvim.appimage
 mkdir ~/.vim/colors
 brew install --HEAD luajit
+# To install useful key bindings and fuzzy completion:
+$(brew --prefix)/opt/fzf/install
+brew install ripgrep
+brew install --HEAD universal-ctags/universal-ctags/universal-ctags
+brew install the_silver_searcher
+brew install fd
 # brew install --HEAD neovim # currently broken
 brew install ctags-exuberant
 sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
