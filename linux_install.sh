@@ -25,6 +25,9 @@ if [ ! -d ~/.config/nvim ]; then
 fi
 ln -sf "$PWD/init.vim" ~/.config/nvim/init.vim
 echo "Neovim: Installing plugins"
+mkdir ~/.vim/colors
+cp ~/.vim/plugged/gruvbox/colors/gruvbox.vim ~/.vim/colors/
+chmod +x ~/nvim.appimage
 ~/nvim.appimage --headless +PlugInstall +qall
 cp ~/.vim/plugged/gruvbox/colors/gruvbox.vim ~/.vim/colors/
 ~/nvim.appimage --headless +PlugInstall +qall
